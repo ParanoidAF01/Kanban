@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Login</title>
+</head>
+<body>
+    <h1>Test Login for Kanban App</h1>
+    <button onclick="login()">Login as Demo User</button>
+    <button onclick="checkToken()">Check Token</button>
+    <button onclick="openBoard()">Open Test Board</button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function login() {
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'demo@example.com',
+                        password: 'demo12345'
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    localStorage.setItem('token', data.data.tokens.accessToken);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
+                    document.getElementById('result').innerHTML = 'Login successful! Token stored.';
+                } else {
+                    document.getElementById('result').innerHTML = 'Login failed: ' + data.message;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = 'Error: ' + error.message;
+            }
+        }
+        
+        function checkToken() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            document.getElementById('result').innerHTML = 'Token: ' + (token ? 'Present' : 'Missing') + '<br>User: ' + (user ? JSON.parse(user).firstName : 'Missing');
+        }
+        
+        function openBoard() {
+            window.location.href = 'http://localhost:3001/board/0125235e-ab74-463f-8b01-27c4d6ccf64c';
+        }
+    </script>
+</body>
+</html>

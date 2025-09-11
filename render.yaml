@@ -1,0 +1,65 @@
+services:
+  # Backend API Service
+  - type: web
+    name: kanban-backend
+    env: node
+    plan: starter
+    rootDir: src/backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: USE_SUPABASE
+        value: true
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false  # Set manually with Supabase connection string
+      - key: SUPABASE_URL
+        sync: false  # Set manually
+      - key: SUPABASE_ANON_KEY
+        sync: false  # Set manually
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false  # Set manually
+      - key: SUPABASE_DB_PASSWORD
+        sync: false  # Set manually
+      - key: SUPABASE_DB_HOST
+        sync: false  # Set manually
+      - key: SUPABASE_DB_NAME
+        value: postgres
+      - key: CORS_ORIGIN
+        fromService:
+          type: web
+          name: kanban-frontend
+          property: host
+      - key: FRONTEND_URL
+        fromService:
+          type: web
+          name: kanban-frontend
+          property: host
+    healthCheckPath: /health
+
+  # Frontend React App
+  - type: web
+    name: kanban-frontend
+    env: static
+    plan: starter
+    rootDir: src/frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: kanban-backend
+          property: host
+      - key: REACT_APP_WS_URL
+        fromService:
+          type: web
+          name: kanban-backend
+          property: host
