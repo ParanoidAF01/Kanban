@@ -5,7 +5,10 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error('Missing Supabase environment variables');
+  console.error('❌ Missing Supabase environment variables:');
+  console.error('SUPABASE_URL:', supabaseUrl ? '✅ Set' : '❌ Missing');
+  console.error('SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? '✅ Set' : '❌ Missing');
+  process.exit(1);
 }
 
 // Create Supabase client with service role key for backend operations
