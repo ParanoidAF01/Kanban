@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { sequelize, testConnection, useSupabase } = require('./config/database');
 
 async function testSupabaseConnection() {
