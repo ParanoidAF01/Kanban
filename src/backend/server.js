@@ -55,8 +55,18 @@ app.use('/api/', limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Static files (serve React app)
-app.use(express.static('dist'));
+// Conditionally serve static files only in non-production environments
+if (process.env.NODE_ENV !== 'production') {
+  // Static files (serve React app)
+  app.use(express.static('dist'));
+
+  // Catch-all handler for React app (SPA routing)
+  // Important: Do not shadow API routes. Only handle non-/api paths.
+  app.get(/^\/(?!api).*/, (req, res) => {
+    // __dirname is src/backend → go up two levels to project root, then dist/index.html
+    res.sendFile(path.join(__dirname, '../../dist/index.html'));
+  });
+}
 
 // Basic routes
 app.get('/health', (req, res) => {
@@ -93,13 +103,6 @@ app.use('/api/activities', activityRoutes);
 
 // Initialize WebSocket
 const io = initializeSocketIO(server);
-
-// Catch-all handler for React app (SPA routing)
-// Important: Do not shadow API routes. Only handle non-/api paths.
-app.get(/^\/(?!api).*/, (req, res) => {
-  // __dirname is src/backend → go up two levels to project root, then dist/index.html
-  res.sendFile(path.join(__dirname, '../../dist/index.html'));
-});
 
 // Error handling middleware (must be last)
 app.use(notFoundHandler);

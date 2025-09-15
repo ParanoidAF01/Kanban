@@ -6,7 +6,8 @@ const rateLimit = require('express-rate-limit');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 
-require('dotenv').config();
+// NO dotenv or external dependencies that could cause issues
+console.log('🔧 Starting simple backend server...');
 
 const app = express();
 const server = createServer(app);
