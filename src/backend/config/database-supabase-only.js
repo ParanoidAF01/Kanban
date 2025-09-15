@@ -1,13 +1,15 @@
 const { createClient } = require('@supabase/supabase-js');
 
 // Supabase client configuration for production deployment
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = process.env.SUPABASE_URL || 'https://kporxdjnhonybhtbvtve.supabase.co';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtwb3J4ZGpuaG9ueWJodGJ2dHZlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzYxNTA3NCwiZXhwIjoyMDczMTkxMDc0fQ.lCwIFQZh7QsfaAC5KrXDTMWnNyEaEdGCqR92PUEX5zM';
+
+console.log('🔧 Environment check:');
+console.log('SUPABASE_URL:', supabaseUrl);
+console.log('SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? 'Set (length: ' + supabaseServiceKey.length + ')' : 'Missing');
 
 if (!supabaseUrl || !supabaseServiceKey) {
-  console.error('❌ Missing Supabase environment variables:');
-  console.error('SUPABASE_URL:', supabaseUrl ? '✅ Set' : '❌ Missing');
-  console.error('SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? '✅ Set' : '❌ Missing');
+  console.error('❌ Missing Supabase environment variables');
   process.exit(1);
 }
 
