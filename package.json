@@ -8,7 +8,7 @@
     "dev:backend": "nodemon src/backend/server.js",
     "dev:frontend": "webpack serve --mode development --config webpack.config.js",
     "build": "webpack --mode production --config webpack.config.js",
-    "start": "node src/backend/server-simple.js",
+    "start": "node src/backend/server-minimal.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "migrate": "node scripts/migrate.js",
